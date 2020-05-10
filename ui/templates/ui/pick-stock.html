@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div id="echarts" style="width: 100%; height: 600px; -webkit-tap-highlight-color: transparent; user-select: none; position: relative;"></div>
+            </div>
+            <div class="card">
+                <div style="width: 100%;">
+                    <table class="table text-center">
+                        <tr>
+                            <td>现价：<span class="stock-open" id="open">{{stock_info.price|safe}}</span></td>
+                            <td>涨跌幅：<span class="stock-open" id="close">{{stock_info.pchange|safe}}</span></td>
+                            <td>今开：<span class="stock-open" id="open">{{stock_info.open|safe}}</span></td>
+                            <td>昨收：<span class="stock-pclose text-dark" id="close">{{stock_info.pre_close|safe}}</span></td>
+                        </tr>
+                        <tr>
+                            <td>最高：<span class="stock-high" id="high">{{stock_info.high|safe}}</span></td>
+                            <td>最低：<span class="stock-low" id="low">{{stock_info.low|safe}}</span></td>
+                            <td>成交量：<span class="text-dark">{{stock_info.volume|safe}}</span></td>
+                            <td>成交额：<span class="text-dark">{{stock_info.amount|safe}}</span></td>
+                        </tr>
+                        <tr>
+                            <td>市净率：<span class="text-dark">{{stock_info.pb|safe}}</span></td>
+                            <td>市盈率：<span class="text-dark">{{stock_info.pe|safe}}</span></td>
+                            <td>每股收益：<span class="text-dark">{{stock_info.esp|safe}}</span></td>
+                            <td>每股净资：<span class="text-dark">{{stock_info.bvps|safe}}</span></td>
+                        </tr>
+                        <tr>
+                            <td>总股本：<span class="text-dark">{{stock_info.totals|safe}}</span></td>
+                            <td>流通股本：<span class="text-dark">{{stock_info.outstanding|safe}}</span></td>
+                            <td>总资产：<span class="text-dark">{{stock_info.totalAssets|safe}}</span></td>
+                            <td>流通资产：<span class="text-dark">{{stock_info.liquidAssets|safe}}</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/pages.js"></script>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('echarts'));
+        var name = {{stock_chart.name|safe}};
+        var datet = {{stock_chart.date|safe}};
+        var opent = {{stock_chart.open|safe}};
+        var closet = {{stock_chart.close|safe}};
+        var hight = {{stock_chart.high|safe}};
+        var lowt = {{stock_chart.low|safe}};
+    </script>
+    <script src="/static/js/stockchartp.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sdcs-自选股票</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-default-dark fixed-layout">
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">载入中</p>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <b>
+                            <img src="/static/img/logo.png" class="dark-logo">
+                        </b>
+                    </a>
+                </div>
+                <div class="navbar-collapse">
+                    <table class="table text-center mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="border-top-0"><a href="/" class="h5 nav-btn text-dark">&nbsp;股票市场&nbsp;</a></td>
+                                <td class="border-top-0"><a href="/pick/" class="h5 nav-btn text-dark pb-2 border-bottom-3 border-info">&nbsp;自选股票&nbsp;</a></td>
+                                <td class="border-top-0"><a href="/hold/" class="h5 nav-btn text-dark">&nbsp;模拟持股&nbsp;</a></td>
+                                <td class="border-top-0"><a href="/predict/" class="h5 nav-btn text-dark">&nbsp;短期预测&nbsp;</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="navbar-nav my-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-muted waves-effect waves-dark" href="/profile/"><img src="{{user_photo.src|safe}}" alt="user" class="img-circle" width="30"></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="page-wrapper">
+            <div class="page-titles container-fluid">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-5 col-md-6 col-sm-12">
+                        <div class="card oh">
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <tr style="background-color:#ecedef">
+                                        <td colspan="2">
+                                            <div class="card-actions" id="card-stockinfo-news" onclick="stockSelect('news');">
+                                                <span class="h3 card-title">商业新闻</span><br>
+                                                <span class="h6 card-subtitle">来源：新浪、凤凰、同花顺等</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% for s in stock_sim_info %}
+                                        <tr class="stock-index" id="stock-{{s.sindex|safe}}">
+                                            <td>
+                                                <div class="card-actions" id="card-stockinfo-{{s.sindex|safe}}" onclick="stockSelect('{{s.sindex|safe}}');">
+                                                    <span class="h5 card-title">{{s.name|safe}}</span>
+                                                    <span class="h3 pick-stock-price">{{s.price|safe}}</span><br>
+                                                    <span class="h6 card-subtitle">{{s.code|safe}}</span>
+                                                    <span class="h6 pick-stock-pchange">{{s.pchange|safe}}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="card-actions d-flex justify-content-end">
+                                                    <img class="d-none" src="/static/img/del.png" onclick="delStock('{{s.sindex|safe}}');">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="card-actions float-left">
+                                                <img class="" src="/static/img/add.png" onclick="document.getElementById('pickStock').style.display='flex';">
+                                            </div>
+                                            <form id="pickStock" action="/pick/" role="form" method="post" class="form-horizontal form-material pt-2" style="display:none">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="submitType" value="addStock">
+                                                <input type="text" class="form-control" name="scode" value="000001" maxlength="6">
+                                                <a class="btn btn-cyan" href="#" onclick="document.getElementById('pickStock').style.display='none';">取消</a>
+                                                <a class="btn btn-danger" href="#" onclick="document.getElementById('pickStock').submit();">添加</a>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-9 col-lg-7 col-md-6 col-sm-12">
+                        <iframe frameborder="0" width="100%" height="1200px" scrolling="auto" id="inner-iframe" src="/pick/inner"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer text-center"> ©2019-2020 <a href="http://hrlu.me:8799" target="_blank">hrlu.me</a>, all rights reserved. Powered by  <a href="mailto:hrlu@stu.suda.edu.cn" title="">Hrlu</a>
+        </footer>
+    </div>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/pages.js"></script>
+</body>
+</html>
+
+
+
+

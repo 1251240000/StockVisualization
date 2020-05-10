@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            {% for news in news_list %}
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title h4">{{news.title|safe}}</p>
+                        <p class="card-subtitle">{{news.pubtime|safe}} 来自 {{news.src|safe}}</p>
+                        <p class="font-16">{{news.content|safe}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/pages.js"></script>
+</body>
+</html>
