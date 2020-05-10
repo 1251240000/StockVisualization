@@ -15,10 +15,14 @@
 pip安装环境： `pip install -Ur requirements.txt`
 
 ### 配置
+#### 迁移数据库
+执行：` python3 manage.py makemigrations `
+之后执行：` python3 manage.py migrate `
+
 #### 创建超级用户
 执行：` python3 manage.py createsuperuser `
 
-#### 配置验证码
+##### 配置验证码
 如果需要使用验证码模块，你需要申请[阿里云](https://dysms.console.aliyun.com/)短信签名及模版，并修改` ui/sms.py `：
 ```python
 accessKeyId = '你的AccessKey ID'
@@ -32,7 +36,7 @@ def SendSms(pnum, vcode):
     # ··· ···
 ```
 
-#### 配置wsgi + Nginx
+##### 配置wsgi + Nginx
 如果需要配置wsgi+Nginx ，你需要：
 - 配置Nginx支持uwsgi及虚拟目录：
 ```bash
