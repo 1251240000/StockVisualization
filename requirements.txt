@@ -42,7 +42,6 @@ proglog==0.1.9
 protobuf==3.11.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pycrypto==2.6.1
 pycryptodome==3.9.4
 PyMySQL==0.9.3
 python-dateutil==2.8.1
