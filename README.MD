@@ -1,6 +1,6 @@
 # Tushare股票数据可视化平台
 
-基于`python3.8.0`和`Django2.1.8` 实现Tushare股票数据可视化平台（毕业设计）。
+基于`python3.8.0`和`Django2.1.8` 实现Tushare股票数据可视化平台。
 
 [一个示例](http://hrlu.me:8000/)
 
@@ -20,6 +20,9 @@ pip安装环境： `pip install -Ur requirements.txt`
 #### 迁移数据库
 执行：` python3 manage.py makemigrations `
 之后执行：` python3 manage.py migrate `
+
+#### 生成/刷新测试数据
+执行：` python3 manage.py refresh_data `
 
 #### 创建超级用户
 执行：` python3 manage.py createsuperuser `
