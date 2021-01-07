@@ -30,7 +30,7 @@ imageio-ffmpeg==0.3.0
 jieba==0.42.1
 jmespath==0.9.4
 Keras-Preprocessing==1.1.0
-lxml==4.4.2
+lxml==4.6.2
 Markdown==3.2.1
 moviepy==1.0.1
 numpy==1.18.1
