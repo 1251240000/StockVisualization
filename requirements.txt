@@ -62,7 +62,7 @@ tensorflow-estimator==2.2.0
 termcolor==1.1.0
 tqdm==4.42.1
 tushare==1.2.48
-urllib3==1.25.7
+urllib3==1.25.8
 uWSGI==2.0.18
 Werkzeug==1.0.1
 wrapt==1.12.1
