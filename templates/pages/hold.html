@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StockVisualization-模拟持股</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="skin-default-dark fixed-layout">
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">载入中</p>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <b>
+                            <img src="/static/img/logo.png" class="dark-logo">
+                        </b>
+                    </a>
+                </div>
+                <div class="navbar-collapse">
+                    <table class="table text-center mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="border-top-0"><a href="/" class="h5 nav-btn text-dark">&nbsp;股票市场&nbsp;</a></td>
+                                <td class="border-top-0"><a href="/pick/" class="h5 nav-btn text-dark">&nbsp;自选股票&nbsp;</a></td>
+                                <td class="border-top-0"><a href="/hold/" class="h5 nav-btn text-dark pb-2 border-bottom-3 border-info">&nbsp;模拟持股&nbsp;</a></td>
+                                <td class="border-top-0"><a href="/predict/" class="h5 nav-btn text-dark">&nbsp;短期预测&nbsp;</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="navbar-nav my-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link text-muted waves-effect waves-dark" href="/profile/"><img src="{{user_photo.src|safe}}" alt="user" class="img-circle" width="30"></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                <div class="row page-titles">
+                    <div class="col-3 align-self-center">
+                        <div class="justify-content-end align-items-center">
+                            <form id="squery" action="/hold/" style="display:flex" role="form" method="get">
+                                <input type="text" class="form-control" name="stockcode" maxlength="6" placeholder="{{stock_quote.code|safe}}">
+                                <a class="btn btn-danger" href="#" onclick="if (document.getElementsByName('stockcode')[0].value == ''){document.getElementsByName('stockcode')[0].value = document.getElementsByName('stockcode')[0].placeholder;}document.getElementById('squery').submit();return false;">查询</a>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-9 align-self-center text-right">
+                        <h4 class="text-themecolor"></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{stock_quote.name|safe}}</h5>
+                                <h6 class="card-subtitle">{{stock_quote.code|safe}}</h6>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2">
+                                                <p class="h1 stock-price">{{stock_quote.price|safe}}</p>
+                                                <span class="stock-change">{{stock_quote.change|safe}}</span>&nbsp;&nbsp;
+                                                <span class="stock-pchange">{{stock_quote.pchange|safe}}</span>
+                                            </td>
+                                            <td colspan="2">
+                                                <span class="text-dark">刷新时间：<br>{{stock_quote.date|safe}}<br>{{stock_quote.time|safe}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">今开：<span class="stock-open">{{stock_quote.open|safe}}</span></td>
+                                            <td colspan="2">昨收：<span class="text-dark stock-pclose">{{stock_quote.pre_close|safe}}</span></td>
+                                        </tr>
+                                        <!--tr>
+                                            <td>涨停：<span class="text-danger">{{stock_quote.max|safe}}</td>
+                                            <td>跌停：<span class="text-success">{{stock_quote.min|safe}}</td>
+                                        </tr -->
+                                        <tr>
+                                            <td colspan="2">最高：<span class="stock-high">{{stock_quote.high|safe}}</span></td>
+                                            <td colspan="2">最低：<span class="stock-low">{{stock_quote.low|safe}}</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>买1：<span class="text-danger">{{stock_quote.b1_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-danger">{{stock_quote.b1_v|safe}}笔</span></td>
+                                            <td>卖1：<span class="text-success">{{stock_quote.a1_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-success">{{stock_quote.a1_v|safe}}笔</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>买2：<span class="text-danger">{{stock_quote.b2_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-danger">{{stock_quote.b2_v|safe}}笔</span></td>
+                                            <td>卖2：<span class="text-success">{{stock_quote.a2_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-success">{{stock_quote.a2_v|safe}}笔</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>买3：<span class="text-danger">{{stock_quote.b3_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-danger">{{stock_quote.b3_v|safe}}笔</span></td>
+                                            <td>卖3：<span class="text-success">{{stock_quote.a3_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-success">{{stock_quote.a3_v|safe}}笔</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>买4：<span class="text-danger">{{stock_quote.b4_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-danger">{{stock_quote.b4_v|safe}}笔</span></td>
+                                            <td>卖4：<span class="text-success">{{stock_quote.a4_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-success">{{stock_quote.a4_v|safe}}笔</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>买5：<span class="text-danger">{{stock_quote.b5_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-danger">{{stock_quote.b5_v|safe}}笔</span></td>
+                                            <td>卖5：<span class="text-success">{{stock_quote.a5_p|safe}}</span></td>
+                                            <td class="text-right"><span class="text-success">{{stock_quote.a5_v|safe}}笔</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">买入</h5>
+                                <form id="bStock" action="/hold/" role="form" method="post" class="form-horizontal form-material">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="submitType" value="bStock">
+                                    <input type="hidden" name="scode" value="{{stock_quote.code|safe}}">
+                                    <input type="hidden" name="sname" value="{{stock_quote.name|safe}}">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">代码</th>
+                                                <th class="text-center">名称</th>
+                                                <th class="text-center">买入价格</th>
+                                                <th class="text-center">买入数量</th>
+                                                <th class="text-center">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tr>
+                                            <td class="text-center">{{stock_quote.code|safe}}</td>
+                                            <td class="text-center">{{stock_quote.name|safe}}</td>
+                                            <td class="text-center"><input type="text" class="form-control text-center" name="sprice" size="2" value="{{stock_quote.a1_p|safe}}"></td>
+                                            <td class="text-center"><input type="text" class="form-control text-center" name="svol" size="2" value="100"></td>
+                                            <td class="text-center"><a class="btn btn-info" href="#" onclick="document.getElementById('bStock').submit();return false;">买入</a></td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">持仓</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">代码</th>
+                                            <th class="text-center">名称</th>
+                                            <th class="text-center">当前价格</th>
+                                            <th class="text-center">买入价格</th>
+                                            <th class="text-center">买入数量</th>
+                                            <th class="text-center">买入时间</th>
+                                            <th class="text-center">盈亏</th>
+                                            <th class="text-center">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for record in b_records %}
+                                            <form id="aStock{{record.id|safe}}" action="/hold/" role="form" method="post" class="form-horizontal form-material">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="submitType" value="aStock">
+                                                <input type="hidden" name="rid" value="{{record.id|safe}}">
+                                                <input type="hidden" name="aprice" value="{{record.price|safe}}">
+                                                <input type="hidden" name="scode" value='{{stock_quote.code|safe}}'>
+                                                <tr class="record">
+                                                    <td class="text-center">{{record.code|safe}}</td>
+                                                    <td class="text-center">{{record.name|safe}}</td>
+                                                    <td class="text-center record-price">{{record.price|safe}}</td>
+                                                    <td class="text-center record-bprice">{{record.bprice|safe}}</td>
+                                                    <td class="text-center record-bvolume">{{record.bvolume|safe}}</td>
+                                                    <td class="text-center">{{record.btime|safe}}</td>
+                                                    <td class="text-center record-change">0</td>
+                                                    <td class="text-center"><a class="btn record-btn" href="#" onclick="document.getElementById('aStock{{record.id|safe}}').submit();return false;">卖出</a></td>
+                                                </tr>
+                                            </form>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">卖出记录</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">代码</th>
+                                            <th class="text-center">名称</th>
+                                            <th class="text-center">买入价格</th>
+                                            <th class="text-center">买入数量</th>
+                                            <th class="text-center">买入时间</th>
+                                            <th class="text-center">卖出价格</th>
+                                            <th class="text-center">盈亏</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for record in a_records %}
+                                            <tr class="record">
+                                                <td class="text-center">{{record.code|safe}}</td>
+                                                <td class="text-center">{{record.name|safe}}</td>
+                                                <td class="text-center record-bprice">{{record.bprice|safe}}</td>
+                                                <td class="text-center record-bvolume">{{record.bvolume|safe}}</td>
+                                                <td class="text-center">{{record.btime|safe}}</td>
+                                                <th class="text-center record-price">{{record.aprice|safe}}</th>
+                                                <th class="text-center record-change">0</th>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer text-center"> ©2019-2020 <a href="http://hrlu.me:8799" target="_blank">hrlu.me</a>, all rights reserved. Powered by  <a href="mailto:hrlu@stu.suda.edu.cn" title="">Hrlu</a>
+        </footer>
+    </div>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/pages.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="row page-titles">
+        <div class="col-5 align-self-center">
+            <h4 class="text-themecolor stock-info-name">{{stock_info.name|safe}}</h4>
+        </div>
+        <div class="col-7 align-self-center text-right">
+            <div class="d-flex justify-content-end align-items-center">
+                <form id="squery" action="/" style="display:flex" role="form" method="get">
+                    <input type="text" class="form-control" name="stockcode" maxlength="6" placeholder="">
+                    <a class="btn btn-danger" href="#" onclick="">查询</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="card oh">
+                <div id="echarts" style="width:100%;height:600px;"></div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-body" style="height:600px;">
+                    <h5 class="card-title stock-info-name"></h5>
+                    <h6 class="card-subtitle stock-info-code"></h6>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p class="h1 stock-info-price"></p>
+                                    <span class="stock-info-change"></span>&nbsp;&nbsp;
+                                    <span class="stock-info-pchange"></span>
+                                </td>
+                                <td style="">
+                                    <span class="text-dark">刷新时间：
+                                        <span class="d-block stock-info-date"></span>
+                                        <span class="d-block stock-info-time"></span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>今开：<span class="stock-open stock-info-open"></span></td>
+                                <td>昨收：<span class="text-dark stock-info-preclose"></span></td>
+                            </tr>
+                            <!--tr>
+                                <td>涨停：<span class="text-danger">{{stock_info.max|safe}}</span></td>
+                                <td>跌停：<span class="text-success">{{stock_info.min|safe}}</span></td>
+                            </tr -->
+                            <tr>
+                                <td>最高：<span class="stock-info-high"></span></td>
+                                <td>最低：<span class="stock-info-low"></span></td>
+                            </tr>
+                            <tr>
+                                <td>成交量：<span class="text-dark stock-info-volume"></span></td>
+                                <td>成交额：<span class="text-dark stock-info-amount"></span></td>
+                            </tr>
+                            <tr>
+                                <td>市净率：<span class="text-dark stock-info-pb"></span></td>
+                                <td>市盈率：<span class="text-dark  stock-info-pe"></span></td>
+                            </tr>
+                            <tr>
+                                <td>每股收益：<span class="text-dark stock-info-eps"></span></td>
+                                <td>每股净资：<span class="text-dark stock-info-bvps"></span></td>
+                            </tr>
+                            <tr>
+                                <td>总股本：<span class="text-dark stock-info-totals"></span></td>
+                                <td>流通股本：<span class="text-dark stock-info-outstanding"></span></td>
+                            </tr>
+                            <tr>
+                                <td>总资产：<span class="text-dark stock-info-totalassets"></span></td>
+                                <td>流通资产：<span class="text-dark stock-info-liquidassets"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div>
+                            <h5 class="card-title">个股异动</h5>
+                            <h6 class="card-subtitle">创新高</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center" id="table-rank-up">
+                        <thead class="bg-white">
+                            <tr>
+                                <th>代码</th>
+                                <th>名称</th>
+                                <th>当前价格</th>
+                                <th>涨跌幅</th>
+                                <th>今开</th>
+                                <th>昨收</th>
+                                <th>成交量</th>
+                                <th>成交额</th>
+                                <th>换手率</th>
+                                <th>市盈率</th>
+                                <th>市净率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in rise_list %}
+                                <tr>
+                                    <td><a href="?stockcode={{s.code|safe}}">{{s.code|safe}}</a></td>
+                                    <td>{{s.name|safe}}</td>
+                                    <td><span class="text-danger">{{s.trade|safe}}</span></td>
+                                    <td><span class="text-danger">{{s.changepercent|safe}}</span></td>
+                                    <td>{{s.open|safe}}</td>
+                                    <td>{{s.settlement|safe}}</td>
+                                    <td>{{s.volume|safe}}</td>
+                                    <td>{{s.amount|safe}}</td>
+                                    <td>{{s.turnoverratio|safe}}</td>
+                                    <td>{{s.per|safe}}</td>
+                                    <td>{{s.pb|safe}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div>
+                            <h5 class="card-title">个股异动</h5>
+                            <h6 class="card-subtitle">创新低</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center" id="table-rank-down">
+                        <thead class="bg-white">
+                            <tr>
+                                <th>代码</th>
+                                <th>名称</th>
+                                <th>当前价格</th>
+                                <th>涨跌幅</th>
+                                <th>今开</th>
+                                <th>昨收</th>
+                                <th>成交量</th>
+                                <th>成交额</th>
+                                <th>换手率</th>
+                                <th>市盈率</th>
+                                <th>市净率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in fall_list %}
+                                <tr>
+                                    <td><a href="?stockcode={{s.code|safe}}">{{s.code|safe}}</a></td>
+                                    <td>{{s.name|safe}}</td>
+                                    <td><span class="text-success">{{s.changepercent|safe}}</span></td>
+                                    <td><span class="text-success">{{s.trade|safe}}</span></td>
+                                    <td>{{s.open|safe}}</td>
+                                    <td>{{s.settlement|safe}}</td>
+                                    <td>{{s.volume|safe}}</td>
+                                    <td>{{s.amount|safe}}</td>
+                                    <td>{{s.turnoverratio|safe}}</td>
+                                    <td>{{s.per|safe}}</td>
+                                    <td>{{s.pb|safe}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--div class="row">
+        <div class="col-12">
+            <iframe frameborder="0" width="100%" height="1200px" scrolling="auto" id="inner-iframe" src="/pick/inner" onload="this.height=this.contentWindow.document.body.scrollHeight"></iframe>
+        </div>
+    </div-->
+
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script src="/static/js/jquery.freezeheader.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/pages.js" page="pages-index"></script>
+</body>
+</html>

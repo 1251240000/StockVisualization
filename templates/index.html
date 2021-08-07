@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>StockVisualization-主页</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .nav-btn {
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body class="skin-default-dark fixed-layout">
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">载入中</p>
+        </div>
+    </div>
+    <div id="main-wrapper">
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <b>
+                            <img src="/static/img/logo.png" class="dark-logo">
+                        </b>
+                    </a>
+                </div>
+                <div class="navbar-collapse">
+                    <table class="table text-center mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="border-top-0"><a class="h5 nav-btn text-dark pb-2 border-bottom-3 border-info" id="index">&nbsp;股票市场&nbsp;</a></td>
+                                <td class="border-top-0"><a class="h5 nav-btn text-dark" id="pick">&nbsp;自选股票&nbsp;</a></td>
+                                <td class="border-top-0"><a class="h5 nav-btn text-dark" id="hold">&nbsp;模拟持股&nbsp;</a></td>
+                                <td class="border-top-0"><a class="h5 nav-btn text-dark" id="predict">&nbsp;短期预测&nbsp;</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-muted waves-effect waves-dark" href="/profile/">
+                            <img src="/static/img/h1.png" alt="user" class="img-circle" width="30"></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                <iframe frameborder="0" scrolling="no" id="inner-iframe" width="100%" src="/pages/"></iframe>
+            </div>
+        </div>
+        <footer class="footer text-center"> ©2019-2021 <a href="http://hrlu.cn:8901" target="">hrlu.cn</a>, all rights reserved. Powered by  <a href="mailto:hrlu@stu.suda.edu.cn" title="">Hrlu</a>
+        </footer>
+    </div>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script src="/static/js/jquery.freezeheader.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/pages.js" page="index"></script>
+</body>
+</html>

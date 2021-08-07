@@ -1,8 +1,8 @@
 # Tushare股票数据可视化平台
 
-基于`python3.8.0`和`Django2.1.8` 实现Tushare股票数据可视化平台。
-
-[一个示例](http://hrlu.me:18000/)
+基于`python3.9.5`和`Django3.1.12` 实现Tushare股票数据可视化平台。
+*距离上次编辑次项目已经时隔一年多了，自认为这一年在水平上还是有不小提升的，遂决定将此项目重构，同时也能梳理下所学知识点。*
+[示例](http://sv.hrlu.cn/)
 
 ## 主要功能：
 - 股票代码搜索
@@ -12,9 +12,8 @@
 
 ## 安装
 
-克隆项目至本地：`git clone https://github.com/1251240000/sdcs.git`
-
-pip安装环境： `pip install -Ur requirements.txt`
+克隆项目至本地：`git clone https://github.com/1251240000/StcokVisualization.git`
+pip安装环境： `pip3 install -r requirements.txt`
 
 ### 配置
 #### 迁移数据库
@@ -26,20 +25,6 @@ pip安装环境： `pip install -Ur requirements.txt`
 
 #### 创建超级用户
 执行：` python3 manage.py createsuperuser `
-
-##### 配置验证码
-如果需要使用验证码模块，你需要申请[阿里云](https://dysms.console.aliyun.com/)短信签名及模版，并修改` ui/sms.py `：
-```python
-accessKeyId = '你的AccessKey ID'
-accessSecret = '你的AccessKey Secret'
-
-def SendSms(pnum, vcode):
-
-    # ··· ···
-    request.add_query_param('SignName', "签名名称")
-    request.add_query_param('TemplateCode', "模版CODE")
-    # ··· ···
-```
 
 ##### 配置wsgi + Nginx
 如果需要配置wsgi+Nginx ，你需要：
