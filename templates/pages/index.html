@@ -9,15 +9,67 @@
 
 <body>
     <div class="row page-titles">
-        <div class="col-5 align-self-center">
-            <h4 class="text-themecolor stock-info-name">{{stock_info.name|safe}}</h4>
+        <div class="col-7 align-self-center">
+            <h4 class="text-themecolor stock-info-name"></h4>
         </div>
-        <div class="col-7 align-self-center text-right">
+        <div class="col-5 align-self-center text-right">
             <div class="d-flex justify-content-end align-items-center">
-                <form id="squery" action="/" style="display:flex" role="form" method="get">
-                    <input type="text" class="form-control" name="stockcode" maxlength="6" placeholder="">
-                    <a class="btn btn-danger" href="#" onclick="">查询</a>
-                </form>
+                <input type="text" class="form-control" id="stock-code" maxlength="12" placeholder="" autocomplete="off">
+                <a class="btn btn-danger text-white" id="stock-search">查询</a>
+                
+                
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list m-l-10" id="result-list">
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                    <div class="dropdown-divider m-0 d-none"></div>
+                    <div class="dropdown-item d-none">
+                        <span class="label label-fixed text-center"></span>
+                        <span class="text"></span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -56,8 +108,8 @@
                                 <td>跌停：<span class="text-success">{{stock_info.min|safe}}</span></td>
                             </tr -->
                             <tr>
-                                <td>最高：<span class="stock-info-high"></span></td>
-                                <td>最低：<span class="stock-info-low"></span></td>
+                                <td>最高：<span class="stock-info-high text-danger"></span></td>
+                                <td>最低：<span class="stock-info-low text-success"></span></td>
                             </tr>
                             <tr>
                                 <td>成交量：<span class="text-dark stock-info-volume"></span></td>

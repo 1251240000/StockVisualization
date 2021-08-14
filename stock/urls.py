@@ -1,9 +1,14 @@
 from django.urls import path, include
-from . import views
+from rest_framework import routers
+
+from stock import views
+
+router = routers.DefaultRouter()
+router.register('basic', views.StockBasicViewSet)
+
 
 urlpatterns = [
-    path('test', views.test),
-    path('stock/daily_quotation', views.daily_quotation),
-    path('stock/basic', views.stock_basic),
-    
+    path('store/', include(router.urls)),
+    path('crawl/daily_quotation', views.daily_quotation),
+    path('crawl/basic', views.stock_basic),
 ]

@@ -1598,6 +1598,7 @@ pre {
   border-color: #dee2e6; }
 
 .table .nav-btn:hover {
+    cursor: pointer;
     padding-bottom: 0.5rem;
     border-bottom: 3px solid #e9ecef;
     border-color: #009efb; }
@@ -10461,6 +10462,10 @@ Labels
 
 .label-default {
   background-color: #f8f9fa; }
+
+.label-fixed {
+  width: 68px;
+}
 
 /*******************
 Display Classes

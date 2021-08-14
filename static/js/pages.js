@@ -1,14 +1,14 @@
 /******************************************************/
 /************** CHARTS: <ALL> JS START  ***************/
 /******************************************************/
-function initMAChart(chartElementId = 'echarts', stockCode = '') {
+function initMAChart(stockCode = '', chartElementId = 'echarts', ) {
     if (!$('#' + chartElementId).length) {
         throw new Error("Element #" + chartElementId + " not found!");
     }
     var colorList = ['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'];
     var labelFont = 'bold 12px Sans-serif';
     csrfAjax({
-        url:  "/api/v1/stock/daily_quotation?code=" + stockCode,
+        url:  "/api/v1/stock/crawl/daily_quotation?code=" + stockCode,
         type: "GET",
         success: function(raw) {
             var results = raw.results;
@@ -345,16 +345,17 @@ function digitFormatter(digit, target = 'float', decimal = 2, ) {
     }
 }
 
-var currentPage = $('script')[$('script').length - 1].getAttribute('page');
+var GlobalVariable = {};
 var print = console.log;
 
-$(".preloader").fadeOut();
+GlobalVariable.currentPage = $('script')[$('script').length - 1].getAttribute('page');
+
 /**************** PAGE: <ALL>  JS END  ****************/
 
 
 
 /******************************************************/
-/************** PAGE: <login>  JS START  **************/
+/************** PAGE: <login-index>  JS START  ********/
 /******************************************************/
 function userLogin() {
     csrfAjax({
@@ -396,7 +397,7 @@ $("body").keydown(function(event) {
     }
 });
 
-/*************** PAGE: <login>  JS END  ***************/
+/*************** PAGE: <login-index>  JS END  *********/
 
 
 
@@ -406,18 +407,20 @@ $("body").keydown(function(event) {
 /************** PAGE: <index>  JS START  **************/
 /******************************************************/
 function switchPage(page) {
-    //$(".preloader").fadeIn();
+    $(".preloader").fadeIn('fast');
     $('#inner-iframe').attr('src', '/pages/' + page + '.html');
     $('.nav-btn').removeClass("pb-2 border-bottom-3 border-info");
-    $('#' + page).addClass("pb-2", "border-bottom-3", "border-info");
+    $('#' + page).addClass("pb-2 border-bottom-3 border-info");
 }
 
-if (currentPage == 'index') {
+if (GlobalVariable.currentPage == 'index') {
     $('#inner-iframe').on("load", function () {
-        //$('.preloader', window.parent.document).fadeOut();
+        print('iframe load');
         var actualHeight = $('#inner-iframe').contents().height();
         $('#inner-iframe').height(actualHeight);
+        $(".preloader").fadeOut('fast');
     });
+    switchPage('index');
     $('.nav-btn').click(function () {
         switchPage(this.id);
     })
@@ -426,7 +429,7 @@ if (currentPage == 'index') {
 
 
 /******************************************************/
-/************** PATH: <pages-index>  JS START  **************/
+/************** PAGE: <pages-index>  JS START  ********/
 /******************************************************/
 function freezeRankTableHeader(){
     $("#table-rank-up").freezeHeader({ 'offset': '66px' });
@@ -435,48 +438,133 @@ function freezeRankTableHeader(){
 
 function updateStockBasic(code=''){
     csrfAjax({
-        url: "/api/v1/stock/basic?" + code,
+        url: "/api/v1/stock/crawl/basic?code=" + code,
         type: "GET",
         success: function (data) {
-            var keys = ['name', 'code', 'price', 'date', 'time', 'open', 'preclose', 
-            'high', 'low', 'volume', 'amount', 'pb', 'pe', 'eps', 'bvps', 'totals', 
-            'outstanding', 'totalassets', 'liquidassets', 'change', 'pchange'];
-            var stockInfo = data.results;
+            if (data.code == 200) {
+                var keys = ['name', 'code', 'price', 'date', 'time', 'open', 'preclose', 
+                'high', 'low', 'volume', 'amount', 'pb', 'pe', 'eps', 'bvps', 'totals', 
+                'outstanding', 'totalassets', 'liquidassets', 'change', 'pchange'];
+                var stockInfo = data.results;
 
-            stockInfo.change = stockInfo.price - stockInfo.preclose;
-            stockInfo.pchange = (stockInfo.price - stockInfo.preclose) / stockInfo.preclose;
-            
-            for (var key of keys) {
-                if (['pchange'].includes(key)) {
-                    stockInfo[key] = digitFormatter(stockInfo[key], 'percentage');
+                stockInfo.change = stockInfo.price - stockInfo.preclose;
+                stockInfo.pchange = (stockInfo.price - stockInfo.preclose) / stockInfo.preclose;
+                
+                for (var key of keys) {
+                    if (['pchange'].includes(key)) {
+                        stockInfo[key] = digitFormatter(stockInfo[key], 'percentage');
+                    }
+                    else if (['price', 'open', 'preclose', 'high', 'low', 'pb', 'pe', 'eps', 'bvps', 'change'].includes(key)) {
+                        stockInfo[key] = digitFormatter(stockInfo[key], 'float');
+                    }
+                    else if (['volume', 'amount', 'totals', 'outstanding', 'totalassets', 'liquidassets'].includes(key)) {
+                        stockInfo[key] = digitFormatter(stockInfo[key], 'CNY');
+                    }
+                    $('.stock-info-' + key).text(stockInfo[key]);
+                    // print($('.stock-info-' + key), stockInfo[key]);
                 }
-                else if (['price', 'open', 'preclose', 'high', 'low', 'pb', 'pe', 'eps', 'bvps', 'change'].includes(key)) {
-                    stockInfo[key] = digitFormatter(stockInfo[key], 'float');
-                }
-                else if (['volume', 'amount', 'totals', 'outstanding', 'totalassets', 'liquidassets'].includes(key)) {
-                    stockInfo[key] = digitFormatter(stockInfo[key], 'CNY');
-                }
-                $('.stock-info-' + key).text(stockInfo[key]);
-                // print($('.stock-info-' + key), stockInfo[key]);
+                $(".stock-info-price,.stock-info-change,.stock-info-pchange,.stock-info-open").removeClass("text-danger text-success");
+
+                $(".stock-info-price,.stock-info-change,.stock-info-pchange").addClass(stockInfo.preclose <= stockInfo.price?"text-danger":"text-success");
+                $(".stock-info-open").addClass(stockInfo.preclose <= stockInfo.open?"text-danger":"text-success");
+                //$(".stock-info-high").addClass(stockInfo.preclose <= stockInfo.high?"text-danger":"text-success");
+                //$(".stock-info-low").addClass(stockInfo.preclose <= stockInfo.low?"text-danger":"text-success");
             }
+            else {
 
-            $(".stock-info-price").addClass(stockInfo.preclose <= stockInfo.price?"text-danger":"text-success");
-            $(".stock-info-change").addClass(stockInfo.preclose <= stockInfo.price?"text-danger":"text-success");
-            $(".stock-info-pchange").addClass(stockInfo.preclose <= stockInfo.price?"text-danger":"text-success");
-
-            $(".stock-info-open").addClass(stockInfo.preclose <= stockInfo.open?"text-danger":"text-success");
-            $(".stock-info-high").addClass(stockInfo.preclose <= stockInfo.high?"text-danger":"text-success");
-            $(".stock-info-low").addClass(stockInfo.preclose <= stockInfo.low?"text-danger":"text-success");
+            }
         }
     })    
 }
 
-if (currentPage == 'pages-index') {
-    freezeRankTableHeader();
-    updateStockBasic();
-    initMAChart();
+
+function searchStock() {
+    var searchCode = $('#stock-code').val();
+    if (GlobalVariable.stockCodeSet.has(searchStock)) {
+        initMAChart(stockCode = searchCode);
+        updateStockBasic(searchCode);
+    } else {
+        $('#stock-code').css("border", "1px solid red");
+    }
 }
-/*************** PATH: <pages-index>  JS END  ***************/
+
+function fetchStockRegister() {
+    csrfAjax({
+        url: "/api/v1/stock/store/basic/register/",
+        type: "GET",
+        success: function (data) {
+            GlobalVariable.registeredStock = data.results;
+            GlobalVariable.stockCodeSet = new Set();
+            for (var record of GlobalVariable.registeredStock) {
+                record.index = record.symbol + record.name; // + record.tscode + record.sinacode
+                GlobalVariable.stockCodeSet.add(record.symbol);
+            }
+        }
+    })
+}
+
+function associativeSearch(input) {
+    var res = [];
+    for (var stock of GlobalVariable.registeredStock) {
+        if (stock.index.indexOf(input) != -1) {
+            res.push(stock);
+        }
+        if (res.length >= 10) {
+            break;
+        }
+    }
+    return res;
+}
+
+$("#stock-code").bind("input propertychange", function() {
+    $('#result-list').addClass('show');
+    var input = $('#stock-code').val();
+    var res = associativeSearch(input);
+
+    $('.dropdown-item').addClass('d-none');
+    $('.dropdown-divider').addClass('d-none');
+
+    $('.dropdown-item > .label').removeClass('label-info label-success');
+    $('.dropdown-item > .text').removeClass('text-info text-success');
+
+    for (var i = 0; i < res.length; i++) {
+        $('.dropdown-item > .label').eq(i).text(res[i].name);
+        $('.dropdown-item > .text').eq(i).text('[' + res[i].symbol + ']');
+        
+        if (res[i].tscode.indexOf('SZ') != -1) {
+            $('.dropdown-item > .label').eq(i).addClass('label-info');
+            $('.dropdown-item > .text').eq(i).addClass('text-info');
+        } else {
+            $('.dropdown-item > .label').eq(i).addClass('label-success');
+            $('.dropdown-item > .text').eq(i).addClass('text-success');
+        }
+        
+        $('.dropdown-item').eq(i).removeClass('d-none');
+        if (i != 0) {
+            $('.dropdown-divider').eq(i-1).removeClass('d-none');    
+        }
+    }
+});
+
+if (GlobalVariable.currentPage == 'pages-index') {
+    // 固定个股异动表头
+    freezeRankTableHeader();
+    // 更新股票基本信息
+    updateStockBasic();
+    // 初始化均线图
+    initMAChart();
+    // 获取A股股票清单
+    fetchStockRegister();
+    // 绑定搜索事件
+    $('#stock-search').click(function() {searchStock();});
+    // 绑定回车触发搜索
+    $("#stock-code").keydown(function(event) {
+        if (event.keyCode == "13") {
+            searchStock();
+        }
+    });
+}
+/*************** PATH: <pages-index>  JS END  *********/
 
                   
                   

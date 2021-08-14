@@ -1,11 +1,11 @@
-from django.http import JsonResponse
-
+from rest_framework.response import Response
 
 def rest_resp(code=200, msg='OK', results={}):
-    return JsonResponse({
+    return Response(data={
         'code': code,
         'msg': msg,
         'results': results,
+        'count': len(results),
     })
 
 
