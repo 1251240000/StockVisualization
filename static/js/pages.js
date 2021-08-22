@@ -478,14 +478,25 @@ function updateStockBasic(code=''){
 }
 
 
-function searchStock() {
-    var searchCode = $('#stock-code').val();
-    if (GlobalVariable.stockCodeSet.has(searchStock)) {
+function hideSearchResults() {
+    $('#result-list').removeClass('show');
+}
+
+
+function searchStock(searchCode = '') {
+    if (searchCode == '') {
+        var searchCode = $('#stock-code').val();
+    } else {
+        $('#stock-code').val(searchCode);
+    }
+    if (GlobalVariable.stockCodeSet.has(searchCode)) {
+        $('#stock-code').css("border", "1px solid #e9ecef");
         initMAChart(stockCode = searchCode);
         updateStockBasic(searchCode);
     } else {
         $('#stock-code').css("border", "1px solid red");
     }
+    hideSearchResults();
 }
 
 function fetchStockRegister() {
@@ -505,6 +516,12 @@ function fetchStockRegister() {
 
 function associativeSearch(input) {
     var res = [];
+    if (GlobalVariable.registeredStock == undefined) {
+        return res;
+    }
+    if (input == '') {
+        return res;
+    }
     for (var stock of GlobalVariable.registeredStock) {
         if (stock.index.indexOf(input) != -1) {
             res.push(stock);
@@ -516,7 +533,7 @@ function associativeSearch(input) {
     return res;
 }
 
-$("#stock-code").bind("input propertychange", function() {
+function showSearchResults() {
     $('#result-list').addClass('show');
     var input = $('#stock-code').val();
     var res = associativeSearch(input);
@@ -530,6 +547,7 @@ $("#stock-code").bind("input propertychange", function() {
     for (var i = 0; i < res.length; i++) {
         $('.dropdown-item > .label').eq(i).text(res[i].name);
         $('.dropdown-item > .text').eq(i).text('[' + res[i].symbol + ']');
+        $('.dropdown-item > .stock-symbol').eq(i).text(res[i].symbol);
         
         if (res[i].tscode.indexOf('SZ') != -1) {
             $('.dropdown-item > .label').eq(i).addClass('label-info');
@@ -544,7 +562,10 @@ $("#stock-code").bind("input propertychange", function() {
             $('.dropdown-divider').eq(i-1).removeClass('d-none');    
         }
     }
-});
+}
+
+
+
 
 if (GlobalVariable.currentPage == 'pages-index') {
     // 固定个股异动表头
@@ -555,7 +576,15 @@ if (GlobalVariable.currentPage == 'pages-index') {
     initMAChart();
     // 获取A股股票清单
     fetchStockRegister();
-    // 绑定搜索事件
+    // 绑定联想搜索
+    $("#stock-code").bind("input propertychange", function() {
+        showSearchResults();
+    });
+    $('#result-list > .dropdown-item').click( function() {
+        var code = $(this).find('.stock-symbol').text();
+        searchStock(code);
+    })
+    // 绑定搜索点击事件
     $('#stock-search').click(function() {searchStock();});
     // 绑定回车触发搜索
     $("#stock-code").keydown(function(event) {

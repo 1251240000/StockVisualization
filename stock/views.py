@@ -1,7 +1,7 @@
+from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes, action
-
 
 from stock.models import StockBasic
 from stock.rests import StockBasicSerializer
@@ -16,10 +16,12 @@ from config import DEFAULT_STOCK
 
 def _get_stock(request):
     code = request.GET.get('code', ) or DEFAULT_STOCK
-    if not StockBasic.objects.filter(tscode=code).exists():
-        return None
-    return StockBasic.objects.get(tscode=code)
-
+    stock = StockBasic.objects.filter(
+        Q(tscode=code) | Q(sinacode=code) | Q(symbol=code)
+    )
+    if stock.count() == 1:
+        return stock.first()
+    return None
 
 @api_view()
 @permission_classes((permissions.AllowAny, ))
