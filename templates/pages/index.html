@@ -138,8 +138,8 @@
                                 <td>流通股本：<span class="text-dark stock-info-outstanding"></span></td>
                             </tr>
                             <tr>
-                                <td>总资产：<span class="text-dark stock-info-totalassets"></span></td>
-                                <td>流通资产：<span class="text-dark stock-info-liquidassets"></span></td>
+                                <td>总资产：<span class="text-dark stock-info-total_assets"></span></td>
+                                <td>流通资产：<span class="text-dark stock-info-liquid_assets"></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover text-center" id="table-rank-up">
+                    <table class="table table-hover text-center" id="table-rank-high">
                         <thead class="bg-white">
                             <tr>
                                 <th>代码</th>
@@ -176,21 +176,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for s in rise_list %}
-                                <tr>
-                                    <td><a href="?stockcode={{s.code|safe}}">{{s.code|safe}}</a></td>
-                                    <td>{{s.name|safe}}</td>
-                                    <td><span class="text-danger">{{s.trade|safe}}</span></td>
-                                    <td><span class="text-danger">{{s.changepercent|safe}}</span></td>
-                                    <td>{{s.open|safe}}</td>
-                                    <td>{{s.settlement|safe}}</td>
-                                    <td>{{s.volume|safe}}</td>
-                                    <td>{{s.amount|safe}}</td>
-                                    <td>{{s.turnoverratio|safe}}</td>
-                                    <td>{{s.per|safe}}</td>
-                                    <td>{{s.pb|safe}}</td>
-                                </tr>
-                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -209,7 +194,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover text-center" id="table-rank-down">
+                    <table class="table table-hover text-center" id="table-rank-low">
                         <thead class="bg-white">
                             <tr>
                                 <th>代码</th>
@@ -226,21 +211,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for s in fall_list %}
-                                <tr>
-                                    <td><a href="?stockcode={{s.code|safe}}">{{s.code|safe}}</a></td>
-                                    <td>{{s.name|safe}}</td>
-                                    <td><span class="text-success">{{s.changepercent|safe}}</span></td>
-                                    <td><span class="text-success">{{s.trade|safe}}</span></td>
-                                    <td>{{s.open|safe}}</td>
-                                    <td>{{s.settlement|safe}}</td>
-                                    <td>{{s.volume|safe}}</td>
-                                    <td>{{s.amount|safe}}</td>
-                                    <td>{{s.turnoverratio|safe}}</td>
-                                    <td>{{s.per|safe}}</td>
-                                    <td>{{s.pb|safe}}</td>
-                                </tr>
-                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

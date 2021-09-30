@@ -413,13 +413,24 @@ function switchPage(page) {
     $('#' + page).addClass("pb-2 border-bottom-3 border-info");
 }
 
-if (GlobalVariable.currentPage == 'index') {
-    $('#inner-iframe').on("load", function () {
-        print('iframe load');
+function resizeIframe() {
+    if (self == top) {
         var actualHeight = $('#inner-iframe').contents().height();
         $('#inner-iframe').height(actualHeight);
+    } else {
+        var actualHeight = $('#inner-iframe', parent.document).contents().height();
+        $('#inner-iframe', parent.document).height(actualHeight);
+    }
+}
+
+if (GlobalVariable.currentPage == 'index') {
+    $('#inner-iframe').on("load", function () {
+        resizeIframe();
         $(".preloader").fadeOut('fast');
     });
+    window.onresize = function() {
+        resizeIframe();
+    };
     switchPage('index');
     $('.nav-btn').click(function () {
         switchPage(this.id);
@@ -444,7 +455,7 @@ function updateStockBasic(code=''){
             if (data.code == 200) {
                 var keys = ['name', 'code', 'price', 'date', 'time', 'open', 'preclose', 
                 'high', 'low', 'volume', 'amount', 'pb', 'pe', 'eps', 'bvps', 'totals', 
-                'outstanding', 'totalassets', 'liquidassets', 'change', 'pchange'];
+                'outstanding', 'total_assets', 'liquid_assets', 'change', 'pchange'];
                 var stockInfo = data.results;
 
                 stockInfo.change = stockInfo.price - stockInfo.preclose;
@@ -457,7 +468,7 @@ function updateStockBasic(code=''){
                     else if (['price', 'open', 'preclose', 'high', 'low', 'pb', 'pe', 'eps', 'bvps', 'change'].includes(key)) {
                         stockInfo[key] = digitFormatter(stockInfo[key], 'float');
                     }
-                    else if (['volume', 'amount', 'totals', 'outstanding', 'totalassets', 'liquidassets'].includes(key)) {
+                    else if (['volume', 'amount', 'totals', 'outstanding', 'total_assets', 'liquid_assets'].includes(key)) {
                         stockInfo[key] = digitFormatter(stockInfo[key], 'CNY');
                     }
                     $('.stock-info-' + key).text(stockInfo[key]);
@@ -565,6 +576,40 @@ function showSearchResults() {
 }
 
 
+function updateStockRank() {
+    for (var perform of ['high', 'low']) {
+        $('#table-rank-' + perform + ' tbody').empty();
+        csrfAjax({
+            url: "/api/v1/stock/store/top10/?performance=" + perform,
+            type: "GET",
+            success: function (data) {
+                var rank = data.results;
+
+                rank.sort(function compare(a, b) {return Math.abs(b.percent_change) - Math.abs(a.percent_change);});
+                
+                for (var stock of rank) {
+                    $('#table-rank-' + stock.performance + ' tbody').append(`
+                        <tr>
+                            <td><a href="#" onclick="searchStock('${stock.symbol}')">${stock.symbol}</a></td>
+                            <td>${stock.name}</td>
+                            <td><span class="text-${stock.performance=='high'?'danger':'success'}">${stock.close}</span></td>
+                            <td><span class="text-${stock.performance=='high'?'danger':'success'}">${digitFormatter(stock.percent_change, 'percentage')}</span></td>
+                            <td>${stock.open}</td>
+                            <td>${stock.pre_close}</td>
+                            <td>${digitFormatter(stock.volume, 'CNY')}</td>
+                            <td>${digitFormatter(stock.amount, 'CNY')}</td>
+                            <td>${digitFormatter(stock.turn_over_ratio, 'percentage')}</td>
+                            <td>${digitFormatter(stock.pe, 'float')}</td>
+                            <td>${digitFormatter(stock.pb, 'float')}</td>
+                        </tr>
+                    `);
+                }
+                resizeIframe();
+            }
+        })
+    }
+}
+
 
 
 if (GlobalVariable.currentPage == 'pages-index') {
@@ -574,6 +619,8 @@ if (GlobalVariable.currentPage == 'pages-index') {
     updateStockBasic();
     // 初始化均线图
     initMAChart();
+    // 更新个股异动
+    updateStockRank();
     // 获取A股股票清单
     fetchStockRegister();
     // 绑定联想搜索

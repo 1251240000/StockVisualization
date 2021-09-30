@@ -1,10 +1,18 @@
+'''
+Description: 
+Version: 1.0.1
+Autor: hrlu.cn
+Date: 2021-09-30 13:29:05
+LastEditors: hrlu.cn
+LastEditTime: 2021-09-30 13:29:06
+'''
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes, action
 
-from stock.models import StockBasic
-from stock.rests import StockBasicSerializer
+from stock.models import StockBasic, StockTop10
+from stock.rests import StockBasicSerializer, StockTop10Serializer
 
 from utils.api import akshare, tushare, sinajs
 from utils.decorators import authenticate_required, request_methods
@@ -76,3 +84,9 @@ class StockBasicViewSet(viewsets.ModelViewSet):
                 'tscode', 'symbol', 'name'
             )
         )
+
+
+class StockTop10ViewSet(viewsets.ModelViewSet):
+    queryset = StockTop10.objects.all().select_related('stock')
+    serializer_class = StockTop10Serializer
+    filter_fields = ['performance']

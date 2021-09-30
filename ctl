@@ -7,7 +7,7 @@ args = sys.argv
 uwsgi = os.path.join(os.path.dirname(sys.executable), 'uwsgi')
 
 if len(args) <= 1:
-    print('Usage: ctl [start|stop|shell|migrate]')
+    print('Usage: ctl [start|stop|reload|shell|migrate|update]')
 
 elif args[1] == 'start':
     os.system('nohup %s --ini uwsgi.ini --pidfile uwsgi.pid -d uwsgi.log &' % uwsgi)
@@ -25,3 +25,7 @@ elif args[1] == 'migrate':
 elif args[1] == 'shell':
     os.system('%s manage.py shell' % sys.executable)
 
+elif args[1] == 'update':
+    os.system('%s manage.py update_stock_list' % sys.executable)
+    os.system('%s manage.py update_stock_top10' % sys.executable)
+    os.system('%s manage.py update_stock_basic' % sys.executable)

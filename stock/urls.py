@@ -5,6 +5,7 @@ from stock import views
 
 router = routers.DefaultRouter()
 router.register('basic', views.StockBasicViewSet)
+router.register('top10', views.StockTop10ViewSet)
 
 
 urlpatterns = [

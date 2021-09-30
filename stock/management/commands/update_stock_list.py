@@ -8,7 +8,7 @@ def _stock_code_convert(tscode):
     return ''.join(tscode.lower().split('.')[::-1])
 
 class Command(BaseCommand):
-    help = 'Update StockBasic list from api'
+    help = 'Update StockBasic list from tushare api'
     maximum_bulk_length = 128
 
     def handle(self, *args, **kwargs):
