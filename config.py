@@ -4,9 +4,9 @@
     DB_PASSWD: 用户密码
     DB_NAME: 数据库名（系统会自动创建数据库）
 '''
-DB_HOST = '127.0.0.1'
-DB_USER = 'root'
-DB_PASSWD = 'Lhr2014.'
+DB_HOST = 'localhost'
+DB_USER = ''
+DB_PASSWD = ''
 DB_NAME = 'stockvisualization'
 
 
