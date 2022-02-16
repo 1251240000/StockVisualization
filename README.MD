@@ -17,15 +17,22 @@
 ## 安装
 
 克隆项目至本地：`git clone https://github.com/1251240000/StcokVisualization.git`
+
 pip安装环境： `pip3 install -r requirements.txt`
 
 ### 配置
 #### 迁移数据库
 执行：` python3 manage.py makemigrations `
+
 之后执行：` python3 manage.py migrate `
 
 #### 生成/刷新测试数据
-执行：` python3 manage.py refresh_data `
+执行：
+```bash
+python3 manage.py update_stock_basic
+python3 manage.py update_stock_list
+python3 manage.py update_stock_top10
+```
 
 #### 创建超级用户
 执行：` python3 manage.py createsuperuser `
