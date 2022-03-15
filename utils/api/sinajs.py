@@ -4,7 +4,7 @@ Version: 1.0.1
 Autor: hrlu.cn
 Date: 2021-09-30 16:38:48
 LastEditors: hrlu.cn
-LastEditTime: 2021-09-30 17:41:05
+LastEditTime: 2022-03-15 10:12:06
 '''
 import re
 import math
@@ -23,6 +23,10 @@ https://stock.finance.sina.com.cn/stock/api/jsonp.php//StockService.getRankBySym
 https://quotes.sina.com.cn/cn/api/openapi.php/CB_AllService.getMemordlistbysymbol?callback=var%20noticeData=&num=8&PaperCode=600600
 '''
 
+headers = {
+    'Referer': 'https://finance.sina.com.cn'
+}
+
 
 def get_stock_basic_in_bulk(stocks):
     if not isinstance(stocks, (list, tuple)):
@@ -38,7 +42,7 @@ def get_stock_basic_in_bulk(stocks):
         url = "https://hq.sinajs.cn/" + query_param
 
         try:
-            req = requests.get(url)
+            req = requests.get(url, headers=headers)
             rows = re.findall(r'"(.*)"', req.text)
             codes = re.findall(r'hq_str_(\D{2}\d{6})_i', req.text)
 
